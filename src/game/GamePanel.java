@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Image grass;
     Image ground;
     Image sky;
+    Image wood;
     Image playerImg;
 
     public GamePanel(GameFrame frame) {
@@ -42,6 +43,7 @@ public class GamePanel extends JPanel implements ActionListener {
             grass = ImageIO.read(getClass().getClassLoader().getResource("grass.png"));
             ground = ImageIO.read(getClass().getClassLoader().getResource("ground.png"));
             sky = ImageIO.read(getClass().getClassLoader().getResource("sky.png"));
+            wood = ImageIO.read(getClass().getClassLoader().getResource("wood.png"));
             playerImg = ImageIO.read(getClass().getClassLoader().getResource("player.png"));
 
             // Verify images loaded
@@ -73,7 +75,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 24; j++) {
-                g2d.drawImage(sky, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
+                if (i == 5 && j > 10 && j < 21) {
+                    g2d.drawImage(wood, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
+                } else {
+                    g2d.drawImage(sky, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
+                }
                 width += gameFrame.TileSize;
             }
             height += gameFrame.TileSize;
