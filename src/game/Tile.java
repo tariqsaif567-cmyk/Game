@@ -8,9 +8,9 @@ public class Tile {
     public boolean isSolid;
 
     public Tile() {
+        tileImage = null;
+        isSolid = false;
     }
-    
-    
 
     public Tile(Image tileImage, boolean isSolid) {
         this.tileImage = tileImage;
