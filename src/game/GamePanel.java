@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -16,6 +15,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     Characters player2;
     GameFrame gameFrame;
+    TileManager tm;
     Timer gameTimer;
     Image grass;
     Image ground;
@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements ActionListener {
         //this.setSize(new Dimension(gameFrame.GameWidth, gameFrame.GameHeight));
         this.setBackground(Color.black);
         initImages();
+        tm = new TileManager(gameFrame);
         player2 = new Characters(0, gameFrame.TileSize * 6, this.playerImg, this);
         addKeyListener(player2);
         setFocusable(true);
@@ -39,29 +40,14 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void initImages() {
         try {
-            // Use getResource() instead of getResourceAsStream()
-            grass = ImageIO.read(getClass().getClassLoader().getResource("grass.png"));
-            ground = ImageIO.read(getClass().getClassLoader().getResource("ground.png"));
-            sky = ImageIO.read(getClass().getClassLoader().getResource("sky.png"));
-            wood = ImageIO.read(getClass().getClassLoader().getResource("wood.png"));
             playerImg = ImageIO.read(getClass().getClassLoader().getResource("player.png"));
 
-            // Verify images loaded
-            if (grass == null) {
-                System.out.println("grass is null");
-            }
-            if (ground == null) {
-                System.out.println("ground is null");
-            }
-            if (sky == null) {
-                System.out.println("sky is null");
-            }
             if (playerImg == null) {
                 System.out.println("player is null");
             }
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.out.println(ex);
         }
     }
 
@@ -70,38 +56,7 @@ public class GamePanel extends JPanel implements ActionListener {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        int width = 0;
-        int height = 0;
-
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 24; j++) {
-                if (i == 5 && j > 10 && j < 21) {
-                    g2d.drawImage(wood, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-                } else {
-                    g2d.drawImage(sky, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-                }
-                width += gameFrame.TileSize;
-            }
-            height += gameFrame.TileSize;
-            width = 0;
-        }
-
-        for (int i = 0; i < 24; i++) {
-            g2d.drawImage(grass, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-            width += gameFrame.TileSize;
-        }
-
-        height += gameFrame.TileSize;
-        width = 0;
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 24; j++) {
-                g2d.drawImage(ground, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-                width += gameFrame.TileSize;
-            }
-            height += gameFrame.TileSize;
-            width = 0;
-        }
+        tm.draw(g2d);
         player2.draw(g2d);
     }
 
