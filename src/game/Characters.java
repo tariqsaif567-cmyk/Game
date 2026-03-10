@@ -7,11 +7,13 @@ import java.awt.event.KeyListener;
 
 public class Characters implements KeyListener {
 
-    public final int SPEED = 6;
+    public final int XSPEED = 6;
+    
     public int playerX;
     public int playerY;
     public Image playerImage;
     public GamePanel gp;
+    public final int YSPEED;
     public boolean leftPressed, rightPressed, upPressed, downPressed;
 
     public Characters(int playerX, int playerY, Image playerImage, GamePanel gp) {
@@ -19,19 +21,21 @@ public class Characters implements KeyListener {
         this.playerY = playerY;
         this.playerImage = playerImage;
         this.gp = gp;
+        YSPEED = gp.gameFrame.TileSize;
+        
 
     }
 
     public void move() {
-        if (leftPressed && playerX - SPEED >= 0) {
-            playerX -= SPEED;
+        if (leftPressed && playerX - XSPEED >= 0) {
+            playerX -= XSPEED;
         }
-        if (rightPressed && playerX + SPEED <= gp.gameFrame.GameWidth - gp.gameFrame.TileSize) {
-            playerX += SPEED;
+        if (rightPressed && playerX + XSPEED <= gp.gameFrame.GameWidth - gp.gameFrame.TileSize) {
+            playerX += XSPEED;
         }
-//        if (upPressed) {
-//            playerY -= SPEED;
-//        }
+        if (upPressed && playerY >= gp.gameFrame.TileSize * 6 - YSPEED) {
+            playerY -= YSPEED;
+        }
 //        if (downPressed) {
 //            playerY += SPEED;
 //        }
@@ -76,6 +80,9 @@ public class Characters implements KeyListener {
 
         if (key == KeyEvent.VK_UP) {
             upPressed = false;
+            if (playerY != gp.gameFrame.TileSize * 6) {
+                playerY = gp.gameFrame.TileSize * 6;
+            }
         }
 
         if (key == KeyEvent.VK_LEFT) {
