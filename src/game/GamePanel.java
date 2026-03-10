@@ -5,17 +5,22 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements ActionListener {
 
+    Characters player2;
     GameFrame gameFrame;
+    Timer gameTimer;
     Image grass;
     Image ground;
     Image sky;
-    Image player;
+    Image playerImg;
 
     public GamePanel(GameFrame frame) {
         gameFrame = frame;
@@ -23,6 +28,12 @@ public class GamePanel extends JPanel {
         this.setSize(new Dimension(gameFrame.GameWidth, gameFrame.GameHeight));
         this.setBackground(Color.black);
         initImages();
+        player2 = new Characters(0, gameFrame.TileSize * 6, this.playerImg, this);
+        addKeyListener(player2);
+        setFocusable(true);
+
+        gameTimer = new Timer(16, this);
+        gameTimer.start();
     }
 
     public void initImages() {
@@ -31,7 +42,7 @@ public class GamePanel extends JPanel {
             grass = ImageIO.read(getClass().getClassLoader().getResource("grass.png"));
             ground = ImageIO.read(getClass().getClassLoader().getResource("ground.png"));
             sky = ImageIO.read(getClass().getClassLoader().getResource("sky.png"));
-            player = ImageIO.read(getClass().getClassLoader().getResource("player.png"));
+            playerImg = ImageIO.read(getClass().getClassLoader().getResource("player.png"));
 
             // Verify images loaded
             if (grass == null) {
@@ -43,8 +54,8 @@ public class GamePanel extends JPanel {
             if (sky == null) {
                 System.out.println("sky is null");
             }
-            if (player == null) {
-                System.out.println("sky is null");
+            if (playerImg == null) {
+                System.out.println("player is null");
             }
 
         } catch (IOException ex) {
@@ -85,8 +96,13 @@ public class GamePanel extends JPanel {
             height += gameFrame.TileSize;
             width = 0;
         }
-        g2d.drawImage(player, gameFrame.TileSize * 12, gameFrame.TileSize * 5, gameFrame.TileSize, gameFrame.TileSize, null);
-        g2d.dispose();
+        player2.draw(g2d);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        player2.move();
+        repaint();
     }
 
 }
