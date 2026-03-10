@@ -19,14 +19,14 @@ public class Characters implements KeyListener {
         this.playerY = playerY;
         this.playerImage = playerImage;
         this.gp = gp;
-       
+
     }
 
     public void move() {
-        if (leftPressed) {
+        if (leftPressed && playerX - SPEED >= 0) {
             playerX -= SPEED;
         }
-        if (rightPressed) {
+        if (rightPressed && playerX + SPEED <= gp.gameFrame.GameWidth - gp.gameFrame.TileSize) {
             playerX += SPEED;
         }
 //        if (upPressed) {

@@ -12,12 +12,13 @@ public class GameFrame extends JFrame {
     public final int GameHeight = TileSize * 12;
 
     public GameFrame() {
-        this.setPreferredSize(new Dimension(GameWidth, GameHeight));
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        GamePanel gamePanel = new GamePanel(this);
 
+        GamePanel gamePanel = new GamePanel(this);
         this.add(gamePanel);
-        this.setLayout(null);
+        gamePanel.setPreferredSize(new Dimension(GameWidth, GameHeight));
+
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //this.setLayout(null);
         this.pack();
         this.setVisible(true);
     }

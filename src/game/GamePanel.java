@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public GamePanel(GameFrame frame) {
         gameFrame = frame;
         //this.setBounds(0, 0, gameFrame.GameWidth, gameFrame.GameHeight);
-        this.setSize(new Dimension(gameFrame.GameWidth, gameFrame.GameHeight));
+        //this.setSize(new Dimension(gameFrame.GameWidth, gameFrame.GameHeight));
         this.setBackground(Color.black);
         initImages();
         player2 = new Characters(0, gameFrame.TileSize * 6, this.playerImg, this);
