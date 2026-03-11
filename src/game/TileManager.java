@@ -16,40 +16,43 @@ public class TileManager {
         initializeSolidness();
     }
 
-    public void draw(Graphics2D gd) {
-        int width = 0;
-        int height = 0;
-
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 24; j++) {
-                if (i == 5 && j > 10 && j < 21) {
-                    gd.drawImage(allTiles[3].tileImage, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-                } else {
-                    gd.drawImage(allTiles[2].tileImage, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-                }
-                width += gameFrame.TileSize;
+    public void draw(Graphics2D gd, Camera camera) {
+    // Calculate which tiles are visible
+    int startCol = camera.x / gameFrame.TileSize;
+    int endCol = (camera.x + gameFrame.ScreenWidth) / gameFrame.TileSize + 1;
+    int startRow = camera.y / gameFrame.TileSize;
+    int endRow = (camera.y + gameFrame.ScreenHeight) / gameFrame.TileSize + 1;
+    
+    // Clamp to world bounds
+    startCol = Math.max(0, Math.min(startCol, gameFrame.WorldCol));
+    endCol = Math.max(0, Math.min(endCol, gameFrame.WorldCol));
+    startRow = Math.max(0, Math.min(startRow, gameFrame.WorldRows));
+    endRow = Math.max(0, Math.min(endRow, gameFrame.WorldRows));
+    
+    // Draw only visible tiles
+    for (int row = startRow; row < endRow; row++) {
+        for (int col = startCol; col < endCol; col++) {
+            // Calculate screen position
+            int screenX = col * gameFrame.TileSize - camera.x;
+            int screenY = row * gameFrame.TileSize - camera.y;
+            
+            // Determine which tile to draw based on your existing logic
+            if (row == 5 && col > 10 && col < 21) {
+                gd.drawImage(allTiles[3].tileImage, screenX, screenY, 
+                            gameFrame.TileSize, gameFrame.TileSize, null);
+            } else if (row < 7) {
+                gd.drawImage(allTiles[2].tileImage, screenX, screenY, 
+                            gameFrame.TileSize, gameFrame.TileSize, null);
+            } else if (row == 7) {
+                gd.drawImage(allTiles[0].tileImage, screenX, screenY, 
+                            gameFrame.TileSize, gameFrame.TileSize, null);
+            } else {
+                gd.drawImage(allTiles[1].tileImage, screenX, screenY, 
+                            gameFrame.TileSize, gameFrame.TileSize, null);
             }
-            height += gameFrame.TileSize;
-            width = 0;
-        }
-
-        for (int i = 0; i < 24; i++) {
-            gd.drawImage(allTiles[0].tileImage, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-            width += gameFrame.TileSize;
-        }
-
-        height += gameFrame.TileSize;
-        width = 0;
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 24; j++) {
-                gd.drawImage(allTiles[1].tileImage, width, height, gameFrame.TileSize, gameFrame.TileSize, null);
-                width += gameFrame.TileSize;
-            }
-            height += gameFrame.TileSize;
-            width = 0;
         }
     }
+}
 
     public void initializeTiles() {
         for (int i = 0; i < allTiles.length; i++) {

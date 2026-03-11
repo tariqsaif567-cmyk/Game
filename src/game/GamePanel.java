@@ -13,14 +13,11 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener {
 
-    Characters player2;
+    Characters player;
     GameFrame gameFrame;
     TileManager tm;
     Timer gameTimer;
-    Image grass;
-    Image ground;
-    Image sky;
-    Image wood;
+    Camera camera;
     Image playerImg;
 
     public GamePanel(GameFrame frame) {
@@ -30,10 +27,13 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         initImages();
         tm = new TileManager(gameFrame);
-        player2 = new Characters(0, gameFrame.TileSize * 6, this.playerImg, this);
-        addKeyListener(player2);
         setFocusable(true);
+        
+        camera = new Camera(gameFrame.ScreenWidth, gameFrame.ScreenHeight, gameFrame.GameWidth, gameFrame.GameHeight);
 
+        player = new Characters(0, gameFrame.TileSize * 6, this.playerImg, this);
+        addKeyListener(player);
+        
         gameTimer = new Timer(16, this);
         gameTimer.start();
     }
@@ -56,13 +56,15 @@ public class GamePanel extends JPanel implements ActionListener {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        tm.draw(g2d);
-        player2.draw(g2d);
+        
+        camera.center(player.playerX, player.playerY);
+        tm.draw(g2d,camera);
+        player.draw(g2d,camera);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        player2.move();
+        player.move();
         repaint();
     }
 
