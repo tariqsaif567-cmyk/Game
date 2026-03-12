@@ -21,7 +21,7 @@ public class Characters implements KeyListener {
         this.playerY = playerY;
         this.playerImage = playerImage;
         this.gp = gp;
-        YSPEED = gp.gameFrame.TileSize;
+        YSPEED = 12;
 
     }
 
